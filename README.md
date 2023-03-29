@@ -1,13 +1,7 @@
 # flag planner
 轻量化的无人机规划器，有任何问题请在issues部分提问。
 ## Table of Contents
-
 * [介绍](#介绍)  
-  * [1.算法框架](#jump1)
-  * [2.Astar](#jump2)
-  * [3.Bspline](#jump3)
-  * [4.RHP](#jump4)
-  * [5.nlopt](#jump5)  
 * [用法](#用法)
 
 
