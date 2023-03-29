@@ -95,7 +95,7 @@ enum algorithm {
 
 
 ## 用法
-该项目已经在Ubuntu 18.04(ROS Melodic)和20.04上进行了测试。由于代码中集成了实际飞行需要使用的VINS定位，因此需要先进行依赖库的配置，配置请参考[ZJU-Fast-Lab课程](https://github.com/ZJU-FAST-Lab/Fast-Drone-250)中[VINS的环境配置](https://www.bilibili.com/video/BV1WZ4y167me?p=8)。如不考虑实际飞行，可以删除代码中的`VINS-Fusion`。
+该项目已经在Ubuntu 18.04(ROS Melodic)和20.04(ROS Noetic)上进行了测试。由于代码中集成了实际飞行需要使用的VINS定位，因此需要先进行依赖库的配置，配置请参考[ZJU-Fast-Lab课程](https://github.com/ZJU-FAST-Lab/Fast-Drone-250)中[VINS的环境配置](https://www.bilibili.com/video/BV1WZ4y167me?p=8)。如不考虑实际飞行，可以删除代码中的`VINS-Fusion`。
 
 运行以下命令编译源代码: 
 
