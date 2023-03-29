@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<launch>
+    <!-- 障碍物运动的中间位置 -->
+    <rosparam param="/obs_poses">
+        [   0.0, 0.0, 0.0, 
+            1.0, 1.0, 0.0   ]
+    </rosparam>
+    <!-- 障碍物的尺寸 -->
+    <rosparam param="/obs_sizes">
+        [   1.0, 1.0, 1.0, 
+            1.0, 1.0, 1.0   ]
+    </rosparam>
+    <!-- 障碍物的速度 -->
+    <rosparam param="/obs_velocities">
+        [   1.0, 0.0, 0.0,
+            0.0, 1.0, 0.0   ]
+    </rosparam>
+    <!-- 障碍物的运动范围 -->
+    <rosparam param="/moving_ranges">
+        [ 5.0, 10.0 ]
+    </rosparam>
+    <!-- 圆环运动的中间位置 -->
+    <rosparam param="/rings_poses">
+        [   3.0, 0.0, 0.0,
+            0.0, 5.0, 0.0   ]
+    </rosparam>
+    <!-- 圆环的尺寸：圆环的内径、外径、厚度 -->
+    <rosparam param="/rings_sizes">
+        [   1.0, 1.5, 0.1,
+            1.0, 1.5, 0.1   ]
+    </rosparam>
+    <!-- 圆环的朝向：记为绕z轴的旋转 -->
+    <rosparam param="/rings_directions">
+        [ 0.0, 0.0 ]
+    </rosparam>
+    <!-- 圆环的运动速度 -->
+    <rosparam param="/rings_velocities">
+        [   1.0, 0.0, 0.0, 
+            -1.0, 0.0, 0.0  ]
+    </rosparam>
+    <!-- 圆环的运动范围 -->
+    <rosparam param="/rings_ranges">
+        [ 12.0, 14.0 ]
+    </rosparam>
+    <!-- 启动仿真环境 -->
+    <node pkg="dynamic_env_generator" type="dynamic_env_generator" name="dynamic_env_generator" output = "screen">
+        <!-- 障碍物的数量 -->
+        <param name="dynamic_obs_num" value="2" />
+        <!-- 栅格的分辨率 -->
+        <param name="voxel_resolution" value="0.1"/>   
+        <!-- 圆环的数量 -->
+        <param name="rings_num" value="2"/>        
+    </node>
+
+</launch>

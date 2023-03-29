@@ -1,0 +1,98 @@
+<snippets>
+  <snippet name="1st_derivative">
+    <global>prevX = 0
+prevY = 0
+is_first = true</global>
+    <function>if (is_first) then
+  is_first = false
+  prevX = time
+  prevY = value
+end
+
+dx = time - prevX
+dy = value - prevY
+prevX = time
+prevY = value
+
+return dy/dx</function>
+    <linkedSource></linkedSource>
+  </snippet>
+  <snippet name="average_two_curves">
+    <global></global>
+    <function>return (value+v1)/2</function>
+    <linkedSource></linkedSource>
+  </snippet>
+  <snippet name="xxxxxx">
+    <global></global>
+    <function>return (v2*v2+v1*v1)</function>
+    <linkedSource></linkedSource>
+  </snippet>
+  <snippet name="integral">
+    <global>prevX = 0
+integral = 0
+is_first = true</global>
+    <function>if (is_first) then
+  is_first = false
+  prevX = time
+end
+
+dx = time - prevX
+prevX = time
+
+integral = integral + value*dx
+
+return integral</function>
+    <linkedSource></linkedSource>
+  </snippet>
+  <snippet name="rad_to_deg">
+    <global></global>
+    <function>return value*180/3.1417</function>
+    <linkedSource></linkedSource>
+  </snippet>
+  <snippet name="remove_offset">
+    <global>is_first = true
+first_value = 0</global>
+    <function>if (is_first) then
+  is_first = false
+  first_value = value
+end
+
+return value - first_value</function>
+    <linkedSource></linkedSource>
+  </snippet>
+
+  <snippet name="sqrt">
+    <global>
+left = 0
+right = 0
+mid = 0
+last = 0
+is_first = true</global>
+    <function>
+left = 0
+right = 0
+mid = 0
+last = 0
+is_first = true
+n = (v2*v2+v1*v1)
+right = n
+if(n==1) then
+  return 1
+end
+if (is_first) then
+  if(mid  > n / mid) then
+    right = mid
+  else
+    left = mid
+  end
+  last = mid
+  mid = left + (right - left)/2
+  if((mid - last)*(mid - last)>0.000001) then 
+    is_first = false
+  end
+end
+
+return mid</function>
+    <linkedSource></linkedSource>
+  </snippet>
+</snippets>

@@ -1,0 +1,32 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "${default}",
+        "limitSymbolsToIncludedHeaders": false
+      },
+      "includePath": [
+        "/home/lrc/deca-planner-master/devel/include/**",
+        "/opt/ros/melodic/include/**",
+        "/home/lrc/deca-planner-master/src/bspline_race/include/**",
+        "/home/lrc/deca-planner-master/src/dynamic_env_generator_v0.0.0/dynamic_env_generator/include/**",
+        "/home/lrc/deca-planner-master/src/grid_path_searcher/include/**",
+        "/home/lrc/deca-planner-master/src/mapping/include/**",
+        "/home/lrc/deca-planner-master/src/uav_simulator/mockamap/include/**",
+        "/home/lrc/deca-planner-master/src/uav_simulator/Utils/multi_map_server/include/**",
+        "/home/lrc/deca-planner-master/src/uav_simulator/Utils/pose_utils/include/**",
+        "/home/lrc/deca-planner-master/src/uav_simulator/Utils/quadrotor_msgs/include/**",
+        "/home/lrc/deca-planner-master/src/uav_simulator/so3_control/include/**",
+        "/home/lrc/deca-planner-master/src/uav_simulator/so3_quadrotor_simulator/include/**",
+        "/home/lrc/deca-planner-master/src/uav_simulator/Utils/uav_utils/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS",
+      "intelliSenseMode": "gcc-x64",
+      "compilerPath": "/usr/bin/gcc",
+      "cStandard": "gnu11",
+      "cppStandard": "c++14"
+    }
+  ],
+  "version": 4
+}
