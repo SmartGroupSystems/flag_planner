@@ -104,7 +104,7 @@ enum algorithm {
 ```
 sudo apt-get install ros-melodic-nlopt
 cd ${YOUR_WORKSPACE_PATH}
-git clone https://github.com/FLAGDroneracing/flag_planner.git
+git clone https://github.com/SmartGroupSystems/flag_planner.git
 catkin_make
 ```
 
@@ -123,7 +123,7 @@ sudo make install
 在这之后，进入你的工作空间
 ```
 cd ${YOUR_WORKSPACE_PATH}
-git clone https://github.com/FLAGDroneracing/flag_planner.git
+git clone https://github.com/SmartGroupSystems/flag_planner.git
 catkin_make
 ```
 
