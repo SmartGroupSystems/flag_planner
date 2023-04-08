@@ -1,9 +1,19 @@
 # flag planner
-轻量化的无人机规划器，有任何问题请在issues部分提问。
+轻量化的无人机规划仿真器 
 ## Table of Contents
-* [介绍](#介绍)  
-* [用法](#用法)
 
+* [介绍](#介绍)  
+  * [1.算法框架](#jump1)
+  * [2.Astar](#jump2)
+  * [3.Bspline](#jump3)
+  * [4.RHP](#jump4)
+  * [5.nlopt](#jump5)
+  
+* [用法](#用法)
+* [可调整的参数](#可调整的参数)
+* [补充](#补充)
+* [Changelog-更新日志](#Changelog-更新日志)
+* [已找出的问题](#已找出的问题)
 
 ## 介绍
 ### <span id="jump1"> 1. 算法框架  </span>
@@ -33,6 +43,8 @@ Receding Horizon Planning (RHP)框架，在可信的地图范围内进行路径�
 <p id="struct2" align="center">
   <img src="pics/pic2.png" width = "480" height = "270"/>
 </p>  
+
+
 
 ### <span id="jump5"> 5. nlopt </span>
 NLOPT中有多种可以选择的算法，在头文件里面算法名称的枚举类型为
@@ -90,40 +102,16 @@ enum algorithm {
 例如 LN_COBYLA 就是用的 COBYLA 算法 ，然后该算法用于局部（L）无需导数（N）的优化. 
   
 
-更多使用可以参考[Nlopt使用](https://www.guyuehome.com/35169)。  
-
+更多使用可以参考这个博客：  
+https://www.guyuehome.com/35169
 
 
 ## 用法
-该项目已经在Ubuntu 18.04(ROS Melodic)和20.04上进行了测试。由于代码中集成了实际飞行需要使用的VINS定位，因此需要先进行依赖库的配置，配置请参考[ZJU-Fast-Lab课程](https://github.com/ZJU-FAST-Lab/Fast-Drone-250)中[VINS的环境配置](https://www.bilibili.com/video/BV1WZ4y167me?p=8)。如不考虑实际飞行，可以删除代码中的`VINS-Fusion`。
-
-运行以下命令编译源代码: 
-
-1.在ubuntu 18.04上
-
-```
+该项目已经在Ubuntu 18.04(ROS Melodic)上进行了测试。运行以下命令进行配置:  
+```linux-kernel-module
 sudo apt-get install ros-melodic-nlopt
 cd ${YOUR_WORKSPACE_PATH}
-git clone https://github.com/SmartGroupSystems/flag_planner.git
-catkin_make
-```
-
-2.在ubuntu 20.04上
-
-必须要采用源码安装Nlopt，进入[Nlopt源码下载](https://nlopt.readthedocs.io/en/latest/)，下载完成后解压，测试采用了2.7.1版本。
-```
-cd nlopt-2.7.1
-mkdir build
-cd build
-cmake ..
-make
-sudo make install
-```
-
-在这之后，进入你的工作空间
-```
-cd ${YOUR_WORKSPACE_PATH}
-git clone https://github.com/SmartGroupSystems/flag_planner.git
+git clone https://github.com/FLAGDroneracing/flag_planner.git
 catkin_make
 ```
 
@@ -137,11 +125,77 @@ eval "$RUN_AFTER_BASHRC"
 ```linux-kernel-module
 ./static_planner.sh
 ```
- `rviz`中会生成随机地图与无人机，使用`2D Nav Goal`为无人机选择目标。这里展示了一个模拟示例：
+ ```rviz``` 中会生成随机地图与无人机，使用```2D Nav Goal```为无人机选择目标。这里展示了一个模拟示例：
 
 <!-- add some gif here -->
  <p id="gif1" align="center">
   <img src="pics/gif1.gif" width = "480" height = "270"/>
  </p>
 
+## 可调整的参数
+### Astar
+文件 `src/grid_path_searcher/launch/astar_node.launch`：  
+```xml
+...
+<arg name="resolution" default="0.2"/> <!-- 栅格边长 -->
+
+<arg name="map_size_x" default="70.0"/>
+<arg name="map_size_y" default="70.0"/>
+<arg name="map_size_z" default=" 5.0"/> <!-- 地图尺寸 -->
+
+<arg name="start_x" default=" 0.0"/>
+<arg name="start_y" default=" 0.0"/> <!-- 起点 -->
+<!-- <arg name="start_z" default=" 1.0"/> -->
+
+<arg name="sight_radius" default=" 5.0"/> <!-- 视野半径 -->
+<arg name="interval" default=" 0.5"/>    <!-- 重规划半径 -->
+...
+```
+### Bspline
+文件 `src/bspline_race/launch/traj_testing.launch`：  
+```xml
+...
+  <arg name="traj_order"     value="3" />       <!-- 轨迹阶数 -->
+  <arg name="dimension"      value="2" />       <!-- 2维 -->
+  <arg name="TrajSampleRate" value="50" />      <!-- 每段点数量 10, 20, 30 , ... ,-->
+  <arg name="max_vel"        value="3.0" />
+  <arg name="max_acc"        value="5.0" />     <!-- 最大速度与加速度 -->
+
+  <arg name="goal_x" 			   value="9.0" />
+  <arg name="goal_y" 			   value="-10.0" />
+  <arg name="lambda1" 			 value="5.0" />
+  <arg name="lambda2" 			 value="1.0" />
+  <arg name="lambda3" 			 value="10.0" />    <!-- 光滑 可行 避障权重 -->
+  <arg name="esdf_collision" value="1.8" />     <!-- 小于此值则认为轨迹有碰撞 -->
+  <arg name="frame" 			   value="world" />   <!-- 参考系 -->
+  <arg name="map_resolution" value="0.1" />
+  <arg name="start_x" 			 value="-39.95" />
+  <arg name="start_y" 			 value="39.95" />   <!-- 地图起始点 -->
+  <arg name="safe_distance"  value="6.0" />     <!-- 安全距离 -->
+  <arg name="dist_p" 			   value="0.5" />     <!-- 均匀b样条每段长度：0.5 -->
+  <arg name="TrajSampleRate" value="50" />
+  <arg name="max_vel" 			 value="3.0" />
+  <arg name="max_acc" 			 value="5.0" />
+...
+```
+## 补充 
+安装plotjuggler  
+```
+sudo apt-get install ros-melodic-plotjuggler 
+```
+点击`layout`,在界面中选中`smk.xml`文件，添加对应窗口：
+<!-- add some gif here -->
+ <p id="gif2" align="center">
+  <img src="pics/gif2.gif" width = "480" height = "270"/>
+ </p>
+
+参考文章：https://blog.csdn.net/qq_39779233/article/details/106478608  
+## 已找出的问题
+~~1. 到达终点时可能会有小幅波动~~
+
+~~2. `control_bspline` 有时会卡死~~
+
+3. 斜向曲线有误差
+## Changelog-更新日志
+待补充
 

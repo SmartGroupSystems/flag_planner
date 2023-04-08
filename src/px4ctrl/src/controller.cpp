@@ -143,7 +143,7 @@ LinearControl::estimateThrustModel(
 }
 
 void 
-LinearControl::resetThrustMapping(void)
+LinearControl::resetThrustMapping(void)//
 {
   thr2acc_ = param_.gra / param_.thr_map.hover_percentage;
   P_ = 1e6;

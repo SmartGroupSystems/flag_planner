@@ -19,7 +19,7 @@ RC_Data_t::RC_Data_t()
     }
 }
 
-void RC_Data_t::feed(mavros_msgs::RCInConstPtr pMsg)
+void RC_Data_t::feed(mavros_msgs::RCInConstPtr pMsg)//根据自己定义的遥控器修改这个函数
 {
     msg = *pMsg;
     rcv_stamp = ros::Time::now();
@@ -35,9 +35,9 @@ void RC_Data_t::feed(mavros_msgs::RCInConstPtr pMsg)
             ch[i] = 0.0;
     }
 
-    mode = ((double)msg.channels[4] - 1000.0) / 1000.0;
-    gear = ((double)msg.channels[5] - 1000.0) / 1000.0;
-    reboot_cmd = ((double)msg.channels[7] - 1000.0) / 1000.0;
+    mode = ((double)msg.channels[4] - 1000.0) / 1000.0;//通道5
+    gear = ((double)msg.channels[5] - 1000.0) / 1000.0;//通道6
+    reboot_cmd = ((double)msg.channels[7] - 1000.0) / 1000.0;//通道8
 
     check_validity();
 
@@ -112,7 +112,7 @@ void RC_Data_t::check_validity()
 
 bool RC_Data_t::check_centered()
 {
-    bool centered = abs(ch[0]) < 1e-5 && abs(ch[0]) < 1e-5 && abs(ch[0]) < 1e-5 && abs(ch[0]) < 1e-5;
+    bool centered = abs(ch[0]) < 1e-5 && abs(ch[1]) < 1e-5 && abs(ch[2]) < 1e-5 && abs(ch[3]) < 1e-5;
     return centered;
 }
 

@@ -99,6 +99,9 @@ void PX4CtrlFSM::process()
 			{
 				if (!rc_data.is_hover_mode || !rc_data.is_command_mode || !rc_data.check_centered())
 				{
+					cout<<"hover_mode_is:"<<rc_data.is_hover_mode<<endl;
+					cout<<"command_mode_is:"<<rc_data.is_command_mode<<endl;
+					cout<<"check_centered_is:"<<rc_data.check_centered()<<endl;
 					ROS_ERROR("[px4ctrl] Reject AUTO_TAKEOFF. If you have your RC connected, keep its switches at \"auto hover\" and \"command control\" states, and all sticks at the center, then takeoff again.");
 					while (ros::ok())
 					{
@@ -156,7 +159,7 @@ void PX4CtrlFSM::process()
 		}
 		else if (rc_data.is_command_mode && cmd_is_received(now_time))
 		{
-			if (state_data.current_state.mode == "OFFBOARD")
+			if (state_data.current_state.mode == "OFFBOARD")	
 			{
 				state = CMD_CTRL;
 				des = get_cmd_des();
@@ -298,7 +301,7 @@ void PX4CtrlFSM::process()
 	default:
 		break;
 	}
-
+	//cout<< "current state is:"<<state<<endl;
 	// STEP2: estimate thrust model
 	if (state == AUTO_HOVER || state == CMD_CTRL)
 	{
