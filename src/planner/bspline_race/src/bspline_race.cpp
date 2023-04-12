@@ -821,6 +821,9 @@ namespace FLAG_Race
         Traj_puber = nh.advertise<bspline_race::BsplineTraj>("/bspline_traj", 10);
         Time_puber = nh.advertise<std_msgs::Float64>("/back_time", 10);
 
+        //发布轨迹转化为SO(3) command
+        //Position_cmd = nh.advertise<bspline_race::PositionCommand>("position_cmd",50);
+
         //可视化执行的轨迹   
         Traj_vis = nh.advertise<nav_msgs::Path>("/traj_vis", 10);
         Traj_vis1 = nh.advertise<nav_msgs::Path>("/traj_smooth", 10);
@@ -1032,17 +1035,22 @@ void plan_manager::current_state_callback(const geometry_msgs::TwistStampedConst
             UniformBspline p = *u;
             UniformBspline v = p.getDerivative();
             UniformBspline a = v.getDerivative();
-
+            UniformBspline j = a.getDerivative();
             //生成轨迹
-            geometry_msgs::PoseStamped tmp_p,tmp_v,tmp_a;
+            geometry_msgs::PoseStamped tmp_p,tmp_v,tmp_a,tmp_j;
             geometry_msgs::PoseStamped tmp_vis;
+
             p_ = p.getTrajectory(p.time_);
             v_ = v.getTrajectory(p.time_);
             a_ = a.getTrajectory(p.time_);
+            j_ = j.getTrajectory(p.time_);
+
             traj.position.clear();
             traj.velocity.clear();
             traj.acceleration.clear();
-            traj_vis.poses.clear();      
+            traj.jerk.clear();
+            traj_vis.poses.clear();   
+               
             for (size_t i = 0; i < p_.rows(); i++)
             {
                 // int count = p_.rows()-i-1;
@@ -1050,13 +1058,18 @@ void plan_manager::current_state_callback(const geometry_msgs::TwistStampedConst
                 tmp_p.header.seq = count;
                 tmp_v.header.seq = count;
                 tmp_a.header.seq = count;
-                tmp_p.pose.position.x   = p_(count,0);tmp_p.pose.position.y   = p_(count,1);tmp_p.pose.position.z   = 0;
-                tmp_v.pose.position.x   = v_(count,0); tmp_v.pose.position.y  = v_(count,1);tmp_v.pose.position.z   = 0;
-                tmp_a.pose.position.x   = a_(count,0); tmp_a.pose.position.y  = a_(count,1); tmp_a.pose.position.z  = 0;
+                tmp_j.header.seq = count;
+
+                tmp_p.pose.position.x   = p_(count,0);tmp_p.pose.position.y   = p_(count,1); tmp_p.pose.position.z   = 0;
+                tmp_v.pose.position.x   = v_(count,0); tmp_v.pose.position.y  = v_(count,1); tmp_v.pose.position.z   = 0;
+                tmp_a.pose.position.x   = a_(count,0); tmp_a.pose.position.y  = a_(count,1); tmp_a.pose.position.z   = 0; 
+                tmp_j.pose.position.x   = j_(count,0); tmp_j.pose.position.y  = j_(count,1); tmp_j.pose.position.z   = 0;
                 tmp_vis.pose.position.x = p_(count,0);tmp_vis.pose.position.y = p_(count,1);tmp_vis.pose.position.z = 0.5;
                 traj.position.push_back(tmp_p) ;
                 traj.velocity.push_back(tmp_v) ;
                 traj.acceleration.push_back(tmp_a);
+                traj.jerk.push_back(tmp_j);
+                
                 traj_vis.poses.push_back(tmp_vis);
                 traj.header.frame_id = frame_;
                 traj_vis.header.frame_id = frame_;

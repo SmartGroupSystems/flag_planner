@@ -48,11 +48,10 @@
 
     <param name="grid_map/local_map_mparamin" value="30"/>
     <param name="grid_map/ground_height" value="-0.01"/>
-    
-      <!-- <remap from="~depth"       to="/mock_map1"/>
-      <remap from="~odom"        to="/odom_visualization/pose"/>  -->
-      <!-- <remap from="~depth"       to="/image_depth_stereo_imu"/>
-      <remap from="~odom"        to="/orb_odom"/>  -->
+
+    <remap from = "/depth" to= "/camera/depth/image_rect_raw"/>
+    <remap from = "/odom" to= "/vins_fusion/imu_propagate"/>
+
     </node>
 
 

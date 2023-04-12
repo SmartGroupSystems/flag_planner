@@ -69,7 +69,7 @@ void PX4CtrlFSM::process()
 			state = AUTO_HOVER;
 			controller.resetThrustMapping();
 			set_hov_with_odom();
-			toggle_offboard_mode(true);
+			toggle_offboard_mode(true);//在intial的时候已经切换为offboard
 
 			ROS_INFO("\033[32m[px4ctrl] MANUAL_CTRL(L1) --> AUTO_HOVER(L2)\033[32m");
 		}
@@ -201,7 +201,7 @@ void PX4CtrlFSM::process()
 
 			ROS_WARN("[px4ctrl] From CMD_CTRL(L3) to MANUAL_CTRL(L1)!");
 		}
-		else if (!rc_data.is_command_mode || !cmd_is_received(now_time))
+		else if (!rc_data.is_command_mode || !cmd_is_received(now_time))//遥控器六通道
 		{
 			state = AUTO_HOVER;
 			set_hov_with_odom();

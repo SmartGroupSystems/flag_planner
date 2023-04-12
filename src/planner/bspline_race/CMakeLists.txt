@@ -19,6 +19,7 @@ find_package(Eigen3 REQUIRED)
 add_message_files(
   FILES
   BsplineTraj.msg
+  PositionCommand.msg
 )
 generate_messages(
   DEPENDENCIES
@@ -32,7 +33,9 @@ catkin_package(
   #DEPENDS system_lib
 )
 include_directories(
-  include ${catkin_INCLUDE_DIRS}
+  SYSTEM
+  include 
+  ${catkin_INCLUDE_DIRS}
   ${Eigen3_INCLUDE_DIRS} 
   ${NLOPT_INCLUDE_DIR}
  
@@ -50,3 +53,5 @@ target_link_libraries(flag_planner
  ${NLOPT_LIBRARIES}
 )
 
+add_executable(traj_server src/traj_server.cpp)
+target_link_libraries(traj_server ${catkin_LIBRARIES})  

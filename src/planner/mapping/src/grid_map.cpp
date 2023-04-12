@@ -96,7 +96,7 @@ void GridMap::initMap(ros::NodeHandle &nh)
 
   /* init callback */
 
-  depth_sub_.reset(new message_filters::Subscriber<sensor_msgs::Image>(node_, "depth", 20));
+  depth_sub_.reset(new message_filters::Subscriber<sensor_msgs::Image>(node_, "/depth", 20));
 
   if (mp_.pose_type_ == POSE_STAMPED)
   {
@@ -110,7 +110,7 @@ void GridMap::initMap(ros::NodeHandle &nh)
   else if (mp_.pose_type_ == 2)
   {
 std::cout<<"odom mode" << std::endl;
-    odom_sub_.reset(new message_filters::Subscriber<nav_msgs::Odometry>(node_, "odom", 100));
+    odom_sub_.reset(new message_filters::Subscriber<nav_msgs::Odometry>(node_, "/odom", 100));
 
     sync_image_odom_.reset(new message_filters::Synchronizer<SyncPolicyImageOdom>(
         SyncPolicyImageOdom(100), *depth_sub_, *odom_sub_));
@@ -120,9 +120,6 @@ std::cout<<"odom mode" << std::endl;
   // use odometry and point cloud
   indep_cloud_sub_ =
       node_.subscribe<sensor_msgs::PointCloud2>("/mock_map", 10, &GridMap::cloudCallback, this);
-  // indep_odom_sub_ =
-  //     node_.subscribe<nav_msgs::Odometry>("/odom_visualization/pose", 10, &GridMap::odomCallback, this);
-
   indep_odom_sub_ =
       node_.subscribe<geometry_msgs::PoseStamped>("/odom_visualization/pose", 10, &GridMap::odomCallback, this);
 

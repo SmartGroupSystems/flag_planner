@@ -12,7 +12,7 @@
 //STANDARD
 #include <algorithm>
 #include <iostream>
-#include<math.h>
+#include <math.h>
 #include<vector>
 #include <numeric>
 #include<string>
@@ -20,6 +20,7 @@
 
 //ros
 #include<ros/ros.h>
+#include <tf/tf.h>
 #include <sensor_msgs/PointCloud2.h> 
 #include <sensor_msgs/Imu.h> 
 #include <visualization_msgs/Marker.h>
@@ -47,6 +48,7 @@
 
 //自定义
 #include<bspline_race/BsplineTraj.h>
+#include<bspline_race/PositionCommand.h>
 #include<bspline_race/EdtTransform.hpp>
 
 
@@ -204,7 +206,7 @@ namespace FLAG_Race
             double startPoint_x,startPoint_y;//找到地图左上角的点，x负，y正
             double safe_distance_;//安全距离
             double esdf_collision;
-            Eigen::MatrixXd p_,v_,a_;//轨迹buffer
+            Eigen::MatrixXd p_,v_,a_,j_;//轨迹buffer
 
             int current_seq = 0;
             Eigen::Vector2d current_pos;
@@ -250,6 +252,7 @@ namespace FLAG_Race
             ros::Publisher Traj_vis;//轨迹可视化发布
             ros::Publisher Traj_vis1;//轨迹可视化发布
             ros::Publisher Traj_puber;//发布轨迹
+            //ros::Publisher Position_cmd;//SO(3)轨迹发布
             ros::Publisher Time_puber;
             ros::Publisher Map_puber;//发布esdf地图可视化
             ros::Publisher col_check;// JS change
@@ -268,6 +271,7 @@ namespace FLAG_Race
             nav_msgs::Path traj_vis1;//轨迹可视化
             bspline_race::BsplineTraj traj;//执行轨迹
             bspline_race::BsplineTraj traj_;//执行轨迹
+            bspline_race::PositionCommand cmd_;//so(3)轨迹指令
             std::vector<Eigen::Vector2d> astar_path_;
 
             /* 色表 */
