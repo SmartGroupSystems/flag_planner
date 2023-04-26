@@ -124,24 +124,25 @@ void run()
 
             bs_msg.yaw = (float)(to_bs_seq);
             bs_pub.publish(bs_msg);
-        
+
+            /*   PUB_CONTROL   */
+
+            // TIME
+            pva_msg.header.stamp = ros::Time::now();
+            cmd_pub.publish(pva_msg);
+            debug_pub.publish(debug_msg);
+            //cout<< pva_msg<<endl;
+            // VIS
+            geometry_msgs::PoseStamped vis_msg;
+            vis_msg.pose.position = pva_msg.position;
+            vis_path.poses.push_back(vis_msg);
+            vis_path_pub.publish(vis_path);
         }
         else
         {
             cout <<"[cmd] Arrived!"<< endl;
         }
-        /*   PUB_CONTROL   */
 
-        // TIME
-        pva_msg.header.stamp = ros::Time::now();
-        cmd_pub.publish(pva_msg);
-        debug_pub.publish(debug_msg);
-        //cout<< pva_msg<<endl;
-        // VIS
-        geometry_msgs::PoseStamped vis_msg;
-        vis_msg.pose.position = pva_msg.position;
-        vis_path.poses.push_back(vis_msg);
-        vis_path_pub.publish(vis_path);
 }
 
 void pose_subCallback(const geometry_msgs::PoseStamped::ConstPtr & msg)
