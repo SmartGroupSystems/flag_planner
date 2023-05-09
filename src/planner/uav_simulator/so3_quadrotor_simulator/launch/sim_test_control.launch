@@ -1,0 +1,39 @@
+<launch>  
+   <arg name="init_x" value="0"/>
+   <arg name="init_y" value="0"/>
+   <arg name="init_z" value="0"/>
+
+   <!-- Simulator -->
+   <node pkg="so3_quadrotor_simulator"
+         type="quadrotor_simulator_so3"
+         name="quadrotor_simulator_so3"
+         output="screen">
+     <param name="rate/odom" value="200.0"/>
+
+     <param name="simulator/init_state_x" value="$(arg init_x)"/>
+     <param name="simulator/init_state_y" value="$(arg init_y)"/>
+     <param name="simulator/init_state_z" value="$(arg init_z)"/>
+     <remap from="~odom" to="/sim/odom"/>
+     <remap from="~cmd" to="/so3_cmd"/>
+     <remap from="~imu" to="/sim/imu"/>     
+   </node> 
+   
+   <!-- Visualization -->
+  <node pkg="odom_visualization" name="odom_visualization" type="odom_visualization" output="screen">
+        <remap from="~odom" to="/sim/odom"/>
+        <param name="color/a" value="0.5"/>    
+        <param name="color/r" value="1.0"/>        
+        <param name="color/g" value="0.0"/>        
+        <param name="color/b" value="0.0"/>       
+        <param name="covariance_scale" value="100.0"/>       
+        <param name="robot_scale" value="1.0"/>
+        <param name="tf45" value="true"/>
+  </node>
+
+   <node name="rviz" pkg="rviz" type="rviz"
+      args="-d $(find so3_quadrotor_simulator)/config/rviz.rviz"
+      />
+ </launch>
+
+
+

@@ -10,7 +10,7 @@
     <param name="grid_map/local_update_range_x" value="5.0"/>
     <param name="grid_map/local_update_range_y" value="5.0"/>
     <param name="grid_map/local_update_range_z" value="4.5"/>
-    <param name="grid_map/obstacles_inflation" value="0.1"/>
+    <param name="grid_map/obstacles_inflation" value="0.05"/>
 
     <!-- 相机参数信息 -->
     <param name="grid_map/cx" value="321.04638671875"/>

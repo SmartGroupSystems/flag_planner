@@ -25,6 +25,7 @@ LinearControl::calculateControl(const Desired_State_t &des,
     Controller_Output_t &u)
 {
   /* WRITE YOUR CODE HERE */
+
       //compute disired acceleration
       Eigen::Vector3d des_acc(0.0, 0.0, 0.0);
       Eigen::Vector3d Kp,Kv;
@@ -32,8 +33,8 @@ LinearControl::calculateControl(const Desired_State_t &des,
       Kv << param_.gain.Kv0, param_.gain.Kv1, param_.gain.Kv2;
       des_acc = des.a + Kv.asDiagonal() * (des.v - odom.v) + Kp.asDiagonal() * (des.p - odom.p);
       des_acc += Eigen::Vector3d(0,0,param_.gra);
-
       u.thrust = computeDesiredCollectiveThrustSignal(des_acc);
+
       double roll,pitch,yaw,yaw_imu;
       double yaw_odom = fromQuaternion2yaw(odom.q);
       double sin = std::sin(yaw_odom);
@@ -54,9 +55,9 @@ LinearControl::calculateControl(const Desired_State_t &des,
   /* WRITE YOUR CODE HERE */
 
   //used for debug
-  // debug_msg_.des_p_x = des.p(0);
-  // debug_msg_.des_p_y = des.p(1);
-  // debug_msg_.des_p_z = des.p(2);
+  debug_msg_.des_p_x = des.p(0);
+  debug_msg_.des_p_y = des.p(1);
+  debug_msg_.des_p_z = des.p(2);
   
   debug_msg_.des_v_x = des.v(0);
   debug_msg_.des_v_y = des.v(1);
@@ -99,7 +100,7 @@ LinearControl::computeDesiredCollectiveThrustSignal(
 
 bool 
 LinearControl::estimateThrustModel(
-    const Eigen::Vector3d &est_a,
+    const Eigen::Vector3d &est_a, //三轴线加速度
     const Parameter_t &param)
 {
   ros::Time t_now = ros::Time::now();

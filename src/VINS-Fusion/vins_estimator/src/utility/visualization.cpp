@@ -66,6 +66,7 @@ void pubLatestOdometry(const Eigen::Vector3d &P, const Eigen::Quaterniond &Q, co
     odometry.twist.twist.linear.y = V.y();
     odometry.twist.twist.linear.z = V.z();
     pub_latest_odometry.publish(odometry);
+    cout<< "current position:"<< P.x()<< "  "<< P.y()<< "  "<< P.z()<<endl;
 }
 
 void pubTrackImage(const cv::Mat &imgTrack, const double t)

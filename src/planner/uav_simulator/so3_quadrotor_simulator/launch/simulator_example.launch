@@ -1,7 +1,7 @@
 <launch>  
    <arg name="init_x" value="0"/>
    <arg name="init_y" value="0"/>
-   <arg name="init_z" value="1"/>
+   <arg name="init_z" value="0"/>
 
    <!-- Simulator -->
    <node pkg="so3_quadrotor_simulator"
@@ -34,9 +34,11 @@
      <remap from="~corrections" to="corrections"/>
      <remap from="~so3_cmd" to="/so3_cmd"/>
      <remap from="~imu" to="/sim/imu"/>
-     <rosparam file="$(find so3_control)/config/gains_hummingbird.yaml"/>
-     <rosparam file="$(find so3_control)/config/corrections_hummingbird.yaml"/>
-     <param name="mass" value="0.98"/>
+     <!--<rosparam file="$(find so3_control)/config/gains_hummingbird.yaml"/>
+     <rosparam file="$(find so3_control)/config/corrections_hummingbird.yaml"/>-->
+     <!--<param name="mass" value="0.98"/>-->
+     <!--注意和Quadrotor中的mass保持一致-->
+     <param name="mass" value="1.27"/>
      <param name="use_angle_corrections " value="false"/>
      <param name="use_external_yaw "      value="false"/>
      <param name="gains/rot/z" value="1.0"/>    

@@ -4,8 +4,8 @@
   <arg name="dimension" 		value="2" /><!-- 2维 -->
   <arg name="TrajSampleRate" 		value="50" /><!-- 10, 20, 30 , ... ,-->
 <!--  <arg name="beta" 			value="2.0" />-->
-  <arg name="max_vel" 			value="1.5" />
-  <arg name="max_acc" 			value="2.5" /><!-- 最大速度与加速度 -->
+  <arg name="max_vel" 			value="1.0" />
+  <arg name="max_acc" 			value="1.5" /><!-- 最大速度与加速度 -->
 
   <arg name="goal_x" 			value="9.0" />
   <arg name="goal_y" 			value="-10.0" />

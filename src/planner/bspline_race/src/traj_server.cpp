@@ -7,7 +7,7 @@ bool first_bs = true;
 #define INF 999.9
 bool arrived = false;
 #define T_RATE 50.0
-double set_height = 0.6;//这个参数后期可以修改
+double set_height = 0.8;//这个参数后期可以修改
 double roll, pitch, yaw;//定义存储r\p\y的容器
 double last_yaw;
 double last_yaw_dot;

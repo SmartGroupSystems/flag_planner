@@ -54,6 +54,7 @@ class Odom_Data_t
 public:
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW
   Eigen::Vector3d p;
+  Eigen::Vector3d p_ini;
   Eigen::Vector3d v;
   Eigen::Quaterniond q;
   Eigen::Vector3d w;
@@ -61,6 +62,7 @@ public:
   nav_msgs::Odometry msg;
   ros::Time rcv_stamp;
   bool recv_new_msg;
+  bool odom_init = true;
 
   Odom_Data_t();
   void feed(nav_msgs::OdometryConstPtr pMsg);

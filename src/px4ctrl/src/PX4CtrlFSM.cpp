@@ -42,7 +42,6 @@ void PX4CtrlFSM::process()
 	Controller_Output_t u;
 	Desired_State_t des(odom_data);
 	bool rotor_low_speed_during_land = false;
-
 	// STEP1: state machine runs
 	switch (state)
 	{
@@ -225,7 +224,7 @@ void PX4CtrlFSM::process()
 
 	case AUTO_TAKEOFF:
 	{
-		if ((now_time - takeoff_land.toggle_takeoff_land_time).toSec() < AutoTakeoffLand_t::MOTORS_SPEEDUP_TIME) // Wait for several seconds to warn prople.
+		if ((now_time - takeoff_land.toggle_takeoff_land_time).toSec() < AutoTakeoffLand_t::MOTORS_SPEEDUP_TIME) // Wait for several seconds to warm prople.
 		{
 			des = get_rotor_speed_up_des(now_time);
 		}
@@ -240,7 +239,8 @@ void PX4CtrlFSM::process()
 		}
 		else
 		{
-			des = get_takeoff_land_des(param.takeoff_land.speed);
+			// des = get_takeoff_land_des(param.takeoff_land.speed);
+			des = takeoff(param.takeoff_land.speed);
 		}
 
 		break;
@@ -301,7 +301,6 @@ void PX4CtrlFSM::process()
 	default:
 		break;
 	}
-	//cout<< "current state is:"<<state<<endl;
 	// STEP2: estimate thrust model
 	if (state == AUTO_HOVER || state == CMD_CTRL)
 	{
@@ -330,6 +329,7 @@ void PX4CtrlFSM::process()
 	else
 	{
 		publish_attitude_ctrl(u, now_time);
+		publish_sim_ctrl(u, now_time);
 	}
 
 	// STEP5: Detect if the drone has landed
@@ -434,6 +434,7 @@ Desired_State_t PX4CtrlFSM::get_rotor_speed_up_des(const ros::Time now)
 	}
 
 	Desired_State_t des;
+	//des.p = Eigen::Vector3d::Zero();
 	des.p = takeoff_land.start_pose.head<3>();
 	des.v = Eigen::Vector3d::Zero();
 	des.a = Eigen::Vector3d(0, 0, des_a_z);
@@ -455,6 +456,22 @@ Desired_State_t PX4CtrlFSM::get_takeoff_land_des(const double speed)
 	Desired_State_t des;
 	des.p = takeoff_land.start_pose.head<3>() + Eigen::Vector3d(0, 0, speed * delta_t);
 	des.v = Eigen::Vector3d(0, 0, speed);
+	des.a = Eigen::Vector3d::Zero();
+	des.j = Eigen::Vector3d::Zero();
+	des.yaw = takeoff_land.start_pose(3);
+	des.yaw_rate = 0.0;
+
+	return des;
+}
+
+Desired_State_t PX4CtrlFSM::takeoff(const double speed)
+{
+	ros::Time now = ros::Time::now();
+	double delta_t = (now - takeoff_land.toggle_takeoff_land_time).toSec() - (speed > 0 ? AutoTakeoffLand_t::MOTORS_SPEEDUP_TIME : 0); // speed > 0 means takeoff
+
+	Desired_State_t des;
+	des.p = takeoff_land.start_pose.head<3>() + Eigen::Vector3d(0, 0, param.takeoff_land.height);
+	des.v = Eigen::Vector3d::Zero();
 	des.a = Eigen::Vector3d::Zero();
 	des.j = Eigen::Vector3d::Zero();
 	des.yaw = takeoff_land.start_pose(3);
@@ -577,6 +594,62 @@ void PX4CtrlFSM::publish_attitude_ctrl(const Controller_Output_t &u, const ros::
 	msg.thrust = u.thrust;
 
 	ctrl_FCU_pub.publish(msg);
+}
+
+void PX4CtrlFSM::publish_sim_ctrl(const Controller_Output_t &u, const ros::Time &stamp)
+{
+	Eigen::Vector3d force_;
+	Eigen::Quaterniond orientation_;
+	Eigen::Vector3d des_acc; double des_yaw;
+	Eigen::Quaterniond q = odom_data.q;
+
+	des_acc << debug_msg.des_a_x, debug_msg.des_a_y, debug_msg.des_a_z;
+	//calculate yaw
+	des_yaw = atan2(2 * (q.x()*q.y() + q.w()*q.z()), q.w()*q.w() + q.x()*q.x() - q.y()*q.y() - q.z()*q.z());
+
+	//calculate force
+	//这里 kp 和 kv前面相当于乘了一个mass作为比例系数,即 force = m* (a + kp*(p*-p) + kv*(v*-v) + g )
+    force_.noalias() = param.mass * des_acc;
+
+	//calculate orientation
+	Eigen::Vector3d b1c, b2c, b3c;
+  	Eigen::Vector3d b1d(cos(des_yaw), sin(des_yaw), 0);
+
+	if (force_.norm() > 1e-6)
+		b3c.noalias() = force_.normalized();
+	else
+		b3c.noalias() = Eigen::Vector3d(0, 0, 1);
+
+	b2c.noalias() = b3c.cross(b1d).normalized();
+	b1c.noalias() = b2c.cross(b3c).normalized();
+
+	Eigen::Matrix3d R;
+	R << b1c, b2c, b3c;
+	orientation_ = Eigen::Quaterniond(R);
+
+	//pub sim_control thrust & orientation
+	quadrotor_msgs::SO3Command msg;
+	msg.force.x = force_(0);
+	msg.force.y = force_(1);
+	msg.force.z = force_(2);
+	msg.orientation.x = orientation_.x();
+	msg.orientation.y = orientation_.y();
+	msg.orientation.z = orientation_.z();
+	msg.orientation.w = orientation_.w();
+	msg.kR[0] = 1.5;
+	msg.kR[1] = 1.5;
+	msg.kR[2] = 1.0;
+	msg.kOm[0] = 0.13;
+	msg.kOm[1] = 0.13;
+	msg.kOm[2] = 0.1;
+	msg.aux.kf_correction = 0.0;
+	msg.aux.angle_corrections[0] = 0.0;
+	msg.aux.angle_corrections[1] = 0.0;
+	msg.aux.current_yaw = 0.0;//just because its no use, so ignore it.
+	msg.aux.enable_motors = true;
+	msg.aux.use_external_yaw = false;
+
+	ctrl_sim_pub.publish(msg);
 }
 
 void PX4CtrlFSM::publish_trigger(const nav_msgs::Odometry &odom_msg)

@@ -1,6 +1,7 @@
 #include <ros/ros.h>
 #include "PX4CtrlFSM.h"
 #include <signal.h>
+#include <quadrotor_msgs/SO3Command.h>
 
 void mySigintHandler(int sig)
 {
@@ -77,6 +78,7 @@ int main(int argc, char *argv[])
                                                   ros::TransportHints().tcpNoDelay());
 
     fsm.ctrl_FCU_pub = nh.advertise<mavros_msgs::AttitudeTarget>("/mavros/setpoint_raw/attitude", 10);
+    fsm.ctrl_sim_pub = nh.advertise<quadrotor_msgs::SO3Command>("/so3_cmd", 10);
     fsm.traj_start_trigger_pub = nh.advertise<geometry_msgs::PoseStamped>("/traj_start_trigger", 10);
 
     fsm.debug_pub = nh.advertise<quadrotor_msgs::Px4ctrlDebug>("/debugPx4ctrl", 10); // debug

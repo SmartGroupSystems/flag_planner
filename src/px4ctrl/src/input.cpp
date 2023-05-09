@@ -130,7 +130,13 @@ void Odom_Data_t::feed(nav_msgs::OdometryConstPtr pMsg)
     msg = *pMsg;
     rcv_stamp = now;
     recv_new_msg = true;
-
+    if(odom_init)
+    {
+        p_ini << msg.pose.pose.position.x,
+                 msg.pose.pose.position.y,
+                 msg.pose.pose.position.z;
+        odom_init = false;
+    }
     uav_utils::extract_odometry(pMsg, p, v, q, w);
 
 // #define VEL_IN_BODY

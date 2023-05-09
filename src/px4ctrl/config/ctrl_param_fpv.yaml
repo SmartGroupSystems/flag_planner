@@ -2,14 +2,14 @@
 # ⭐⭐⭐  Set parameters carefully for satisfied performance!   ⭐⭐⭐ #
 #########################################################################
 
-mass        : 1.3 # kg 
+mass        : 1.27 # kg 
 gra         : 9.81 
 pose_solver : 1     # 0:From ZhepeiWang (drag & less singular) 1:From ZhepeiWang, 2:From rotor-drag    
 ctrl_freq_max   : 100.0
 use_bodyrate_ctrl: false
 max_manual_vel: 1.0
 max_angle: 30  # Attitude angle limit in degree. A negative value means no limit.
-low_voltage: 13.2 # 4S battery
+low_voltage: 14.8 # 4S battery
 
 rc_reverse: # *
     roll: false
@@ -21,8 +21,8 @@ auto_takeoff_land:
     enable: true
     enable_auto_arm: true
     no_RC: false
-    takeoff_height: 0.5 # m
-    takeoff_land_speed: 0.5 # m/s
+    takeoff_height: 0.8 # m
+    takeoff_land_speed: 0.8 # m/s
 
 thrust_model: # The model that maps thrust signal u(0~1) to real thrust force F(Unit:N): F=K1*Voltage^K2*(K3*u^2+(1-K3)*u). 
     print_value: false # display the value of “thr_scale_compensate” or “hover_percentage” during thrust model estimating.
@@ -39,9 +39,9 @@ gain:
     Kp0: 1.5
     Kp1: 1.5 
     Kp2: 1.5
-    Kv0: 1.5
-    Kv1: 1.5
-    Kv2: 1.5
+    Kv0: 1.7
+    Kv1: 1.7
+    Kv2: 1.9
     # ↓↓↓ No use now --
     Kvi0: 0.0
     Kvi1: 0.0

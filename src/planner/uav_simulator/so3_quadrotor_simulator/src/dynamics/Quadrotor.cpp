@@ -14,7 +14,7 @@ Quadrotor::Quadrotor(void)
 {
   alpha0     = 48; // degree
   g_         = 9.81;
-  mass_      = 0.98; // 0.5;
+  mass_      = 1.27; // 0.5;
   double Ixx = 2.64e-3, Iyy = 2.64e-3, Izz = 4.96e-3;
   prop_radius_ = 0.062;
   J_           = Eigen::Vector3d(Ixx, Iyy, Izz).asDiagonal();

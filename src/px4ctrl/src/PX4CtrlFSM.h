@@ -9,7 +9,7 @@
 #include <mavros_msgs/SetMode.h>
 #include <mavros_msgs/CommandLong.h>
 #include <mavros_msgs/CommandBool.h>
-
+#include <quadrotor_msgs/SO3Command.h>
 #include "input.h"
 // #include "ThrustCurve.h"
 #include "controller.h"
@@ -43,6 +43,7 @@ public:
 
 	ros::Publisher traj_start_trigger_pub;
 	ros::Publisher ctrl_FCU_pub;
+	ros::Publisher ctrl_sim_pub;
 	ros::Publisher debug_pub; //debug
 	ros::ServiceClient set_FCU_mode_srv;
 	ros::ServiceClient arming_client_srv;
@@ -87,6 +88,7 @@ private:
 	void set_start_pose_for_takeoff_land(const Odom_Data_t &odom);
 	Desired_State_t get_rotor_speed_up_des(const ros::Time now);
 	Desired_State_t get_takeoff_land_des(const double speed);
+	Desired_State_t takeoff(const double speed);
 
 	// ---- tools ----
 	void set_hov_with_odom();
@@ -98,6 +100,7 @@ private:
 
 	void publish_bodyrate_ctrl(const Controller_Output_t &u, const ros::Time &stamp);
 	void publish_attitude_ctrl(const Controller_Output_t &u, const ros::Time &stamp);
+	void publish_sim_ctrl(const Controller_Output_t &u, const ros::Time &stamp);
 	void publish_trigger(const nav_msgs::Odometry &odom_msg);
 };
 

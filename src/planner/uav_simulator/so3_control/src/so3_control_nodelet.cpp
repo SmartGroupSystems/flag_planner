@@ -150,6 +150,7 @@ SO3ControlNodelet::odom_callback(const nav_msgs::Odometry::ConstPtr& odom)
     des_pos_ = Eigen::Vector3d(init_x_, init_y_, init_z_);
     des_vel_ = Eigen::Vector3d(0,0,0);
     des_acc_ = Eigen::Vector3d(0,0,0);
+    //std::cout<< "des_pos_ is "<< des_pos_<<std::endl;
     publishSO3Command();
   }
   
@@ -194,7 +195,7 @@ SO3ControlNodelet::onInit(void)
   frame_id_ = "/" + quadrotor_name;
 
   double mass;
-  n.param("mass", mass, 0.5);
+  n.param("mass", mass, 0.98);
   controller_.setMass(mass);
 
   n.param("use_external_yaw", use_external_yaw_, true);

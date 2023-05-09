@@ -27,6 +27,7 @@ bool   origin       = false;
 bool   isOriginSet  = false;
 colvec poseOrigin(6);
 ros::Publisher posePub;
+ros::Publisher posesimPub;
 ros::Publisher pathPub;
 ros::Publisher velPub;
 ros::Publisher covPub;
@@ -37,6 +38,7 @@ ros::Publisher meshPub;
 ros::Publisher heightPub;
 tf::TransformBroadcaster* broadcaster;
 geometry_msgs::PoseStamped poseROS;
+nav_msgs::Odometry pose_sim;
 nav_msgs::Path             pathROS;
 visualization_msgs::Marker velROS;
 visualization_msgs::Marker covROS;
@@ -91,6 +93,20 @@ void odom_callback(const nav_msgs::Odometry::ConstPtr& msg)
   poseROS.pose.orientation.y = q(2);
   poseROS.pose.orientation.z = q(3);      
   posePub.publish(poseROS);
+
+  // Pose nav
+  pose_sim.header = msg->header;
+  pose_sim.header.stamp = msg->header.stamp;
+  pose_sim.header.frame_id = string("world");
+  pose_sim.pose.pose.position.x = pose(0);
+  pose_sim.pose.pose.position.y = pose(1);
+  pose_sim.pose.pose.position.z = pose(2);
+  q = R_to_quaternion(ypr_to_R(pose.rows(3,5)));
+  pose_sim.pose.pose.orientation.w = q(0);
+  pose_sim.pose.pose.orientation.x = q(1);
+  pose_sim.pose.pose.orientation.y = q(2);
+  pose_sim.pose.pose.orientation.z = q(3);      
+  posesimPub.publish(pose_sim);
   
   // Velocity
   colvec yprVel(3);
@@ -454,15 +470,16 @@ int main(int argc, char** argv)
   
   ros::Subscriber sub_odom = n.subscribe("odom", 100,  odom_callback);
   ros::Subscriber sub_cmd  = n.subscribe("cmd",  100,  cmd_callback);
-  posePub   = n.advertise<geometry_msgs::PoseStamped>("pose",                100, true);
-  pathPub   = n.advertise<nav_msgs::Path>(            "path",                100, true);
-  velPub    = n.advertise<visualization_msgs::Marker>("velocity",            100, true);
-  covPub    = n.advertise<visualization_msgs::Marker>("covariance",          100, true);
-  covVelPub = n.advertise<visualization_msgs::Marker>("covariance_velocity", 100, true);
-  trajPub   = n.advertise<visualization_msgs::Marker>("trajectory",          100, true);
-  sensorPub = n.advertise<visualization_msgs::Marker>("sensor",              100, true);
-  meshPub   = n.advertise<visualization_msgs::Marker>("robot",               100, true);  
-  heightPub = n.advertise<sensor_msgs::Range>(        "height",              100, true);  
+  posePub    = n.advertise<geometry_msgs::PoseStamped>("pose",                100, true);
+  posesimPub = n.advertise<nav_msgs::Odometry>        ("posesim",             100, true);
+  pathPub    = n.advertise<nav_msgs::Path>(            "path",                100, true);
+  velPub     = n.advertise<visualization_msgs::Marker>("velocity",            100, true);
+  covPub     = n.advertise<visualization_msgs::Marker>("covariance",          100, true);
+  covVelPub  = n.advertise<visualization_msgs::Marker>("covariance_velocity", 100, true);
+  trajPub    = n.advertise<visualization_msgs::Marker>("trajectory",          100, true);
+  sensorPub  = n.advertise<visualization_msgs::Marker>("sensor",              100, true);
+  meshPub    = n.advertise<visualization_msgs::Marker>("robot",               100, true);  
+  heightPub  = n.advertise<sensor_msgs::Range>(        "height",              100, true);  
   tf::TransformBroadcaster b;
   broadcaster = &b;
 

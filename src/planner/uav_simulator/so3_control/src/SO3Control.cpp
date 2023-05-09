@@ -68,10 +68,12 @@ SO3Control::calculateControl(const Eigen::Vector3d& des_pos,
   
 
   force_ = mass_ * g_ * Eigen::Vector3d(0, 0, 1);
+  //std::cout<< "mass is  "<<  mass_<< std::endl;
   if ( flag_use_pos ) force_.noalias() += kx.asDiagonal() * (des_pos - pos_);
   if ( flag_use_vel ) force_.noalias() += kv.asDiagonal() * (des_vel - vel_);
-  if ( flag_use_acc ) force_.noalias() += mass_ * ka.asDiagonal() * (des_acc - acc_) + mass_ * (des_acc);
-
+  if ( flag_use_acc ) force_.noalias() += mass_ * ka.asDiagonal() * (des_acc - acc_) + 
+                                          mass_ * (des_acc);
+  
   // Limit control angle to 45 degree
   double          theta = M_PI / 2;
   double          c     = cos(theta);
