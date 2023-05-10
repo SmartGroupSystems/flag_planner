@@ -1,19 +1,15 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <root>
- <tabbed_widget parent="main_window" name="Main Window">
-  <Tab tab_name="tab1" containers="1">
+ <tabbed_widget name="Main Window" parent="main_window">
+  <Tab containers="1" tab_name="tab1">
    <Container>
-    <DockSplitter orientation="-" count="1" sizes="1">
+    <DockSplitter sizes="1" orientation="-" count="1">
      <DockArea name="...">
-      <plot flip_y="false" style="Lines" flip_x="false" mode="TimeSeries">
-       <range top="19.974785" bottom="-4.483041" left="0.000000" right="16.658804"/>
+      <plot flip_y="false" mode="TimeSeries" style="Lines" flip_x="false">
+       <range top="19.125167" left="0.000000" bottom="-0.466467" right="45.442925"/>
        <limitY/>
-       <curve name="/debugPx4ctrl/des_p_x" color="#1f77b4"/>
-       <curve name="/debugPx4ctrl/des_p_y" color="#d62728"/>
-       <curve name="/debugPx4ctrl/des_p_z" color="#1ac938"/>
-       <curve name="/odom_visualization/pose/pose/position/x" color="#ff7f0e"/>
-       <curve name="/odom_visualization/pose/pose/position/y" color="#f14cc1"/>
-       <curve name="/odom_visualization/pose/pose/position/z" color="#9467bd"/>
+       <curve name="/odom_visualization/pose/pose/position/z" color="#1f77b4"/>
+       <curve name="/so3_cmd/force/z" color="#d62728"/>
       </plot>
      </DockArea>
     </DockSplitter>
@@ -59,8 +55,8 @@
  </Plugins>
  <!-- - - - - - - - - - - - - - - -->
  <previouslyLoaded_Datafiles>
-  <fileInfo prefix="" filename="sim_record.bag">
-   <selected_datasources value="/debugPx4ctrl;/odom_visualization/pose"/>
+  <fileInfo filename="sim_record.bag" prefix="">
+   <selected_datasources value="/odom_visualization/pose;/so3_cmd"/>
    <plugin ID="DataLoad ROS bags">
     <use_header_stamp value="false"/>
     <discard_large_arrays value="true"/>

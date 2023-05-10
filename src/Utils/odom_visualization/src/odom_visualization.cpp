@@ -101,6 +101,9 @@ void odom_callback(const nav_msgs::Odometry::ConstPtr& msg)
   pose_sim.pose.pose.position.x = pose(0);
   pose_sim.pose.pose.position.y = pose(1);
   pose_sim.pose.pose.position.z = pose(2);
+  pose_sim.twist.twist.linear.x = vel(0);
+  pose_sim.twist.twist.linear.y = vel(1);
+  pose_sim.twist.twist.linear.z = vel(2);
   q = R_to_quaternion(ypr_to_R(pose.rows(3,5)));
   pose_sim.pose.pose.orientation.w = q(0);
   pose_sim.pose.pose.orientation.x = q(1);

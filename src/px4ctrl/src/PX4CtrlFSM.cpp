@@ -185,7 +185,7 @@ void PX4CtrlFSM::process()
 				ROS_INFO("\033[32m[px4ctrl] TRIGGER sent, allow user command.\033[32m");
 			}
 
-			// cout << "des.p=" << des.p.transpose() << endl;
+			 //cout << "des.p=" << des.p.transpose() << endl;
 		}
 
 		break;
@@ -329,7 +329,7 @@ void PX4CtrlFSM::process()
 	else
 	{
 		publish_attitude_ctrl(u, now_time);
-		publish_sim_ctrl(u, now_time);
+		publish_sim_ctrl(des,u, now_time);
 	}
 
 	// STEP5: Detect if the drone has landed
@@ -596,14 +596,16 @@ void PX4CtrlFSM::publish_attitude_ctrl(const Controller_Output_t &u, const ros::
 	ctrl_FCU_pub.publish(msg);
 }
 
-void PX4CtrlFSM::publish_sim_ctrl(const Controller_Output_t &u, const ros::Time &stamp)
+void PX4CtrlFSM::publish_sim_ctrl(const Desired_State_t des, const Controller_Output_t &u, const ros::Time &stamp)
 {
 	Eigen::Vector3d force_;
 	Eigen::Quaterniond orientation_;
-	Eigen::Vector3d des_acc; double des_yaw;
+	Eigen::Vector3d des_acc; 
+	double des_yaw;
 	Eigen::Quaterniond q = odom_data.q;
 
-	des_acc << debug_msg.des_a_x, debug_msg.des_a_y, debug_msg.des_a_z;
+	des_acc << debug_msg.des_a_x , debug_msg.des_a_y , debug_msg.des_a_z;
+
 	//calculate yaw
 	des_yaw = atan2(2 * (q.x()*q.y() + q.w()*q.z()), q.w()*q.w() + q.x()*q.x() - q.y()*q.y() - q.z()*q.z());
 
@@ -645,7 +647,7 @@ void PX4CtrlFSM::publish_sim_ctrl(const Controller_Output_t &u, const ros::Time 
 	msg.aux.kf_correction = 0.0;
 	msg.aux.angle_corrections[0] = 0.0;
 	msg.aux.angle_corrections[1] = 0.0;
-	msg.aux.current_yaw = 0.0;//just because its no use, so ignore it.
+	msg.aux.current_yaw = des_yaw;//just because its no use, so ignore it.
 	msg.aux.enable_motors = true;
 	msg.aux.use_external_yaw = false;
 

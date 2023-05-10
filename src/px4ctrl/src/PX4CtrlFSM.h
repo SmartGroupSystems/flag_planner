@@ -100,7 +100,7 @@ private:
 
 	void publish_bodyrate_ctrl(const Controller_Output_t &u, const ros::Time &stamp);
 	void publish_attitude_ctrl(const Controller_Output_t &u, const ros::Time &stamp);
-	void publish_sim_ctrl(const Controller_Output_t &u, const ros::Time &stamp);
+	void publish_sim_ctrl(const Desired_State_t des, const Controller_Output_t &u, const ros::Time &stamp);
 	void publish_trigger(const nav_msgs::Odometry &odom_msg);
 };
 
