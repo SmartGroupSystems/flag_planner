@@ -1,4 +1,5 @@
 #include "controller.h"
+#include "lqr_control.h"
 
 using namespace std;
 
@@ -32,6 +33,13 @@ LinearControl::calculateControl(const Desired_State_t &des,
       Kp << param_.gain.Kp0, param_.gain.Kp1, param_.gain.Kp2;
       Kv << param_.gain.Kv0, param_.gain.Kv1, param_.gain.Kv2;
       des_acc = des.a + Kv.asDiagonal() * (des.v - odom.v) + Kp.asDiagonal() * (des.p - odom.p);
+      
+      // LQR lqr;
+      // lqr.initial(param_, odom, des);
+      // lqr.cal_Riccati();
+      // lqr.calcacc();
+      // des_acc = lqr.u;
+
       des_acc += Eigen::Vector3d(0,0,param_.gra);
       // std::cout<<"des acc="<<  des_acc.transpose()-odom.p.transpose()<<std::endl;
       u.thrust = computeDesiredCollectiveThrustSignal(des_acc);

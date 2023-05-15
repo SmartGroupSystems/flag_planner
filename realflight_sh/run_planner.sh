@@ -7,6 +7,7 @@ sleep 1 ;
 RUN_AFTER_BASHRC="roslaunch bspline_race traj_testing.launch" gnome-terminal --title="Bspline" --tab &
 sleep 1;
 RUN_AFTER_BASHRC="rosrun bspline_race traj_server" gnome-terminal --title="Traj server" --tab &
-sleep 1;
+sleep 2;
+echo "planner is starting now, use go.sh to fly"
 wait
 exit 0

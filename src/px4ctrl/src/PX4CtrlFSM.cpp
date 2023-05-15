@@ -239,8 +239,8 @@ void PX4CtrlFSM::process()
 		}
 		else
 		{
-			// des = get_takeoff_land_des(param.takeoff_land.speed);
-			des = takeoff(param.takeoff_land.speed);
+			des = get_takeoff_land_des(param.takeoff_land.speed);
+			// des = takeoff(param.takeoff_land.speed);
 		}
 
 		break;

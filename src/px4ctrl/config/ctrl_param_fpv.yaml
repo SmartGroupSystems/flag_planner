@@ -21,7 +21,7 @@ auto_takeoff_land:
     enable: true
     enable_auto_arm: true
     no_RC: false
-    takeoff_height: 1.0 # m
+    takeoff_height: 0.8 # m
     takeoff_land_speed: 0.8 # m/s
 
 thrust_model: # The model that maps thrust signal u(0~1) to real thrust force F(Unit:N): F=K1*Voltage^K2*(K3*u^2+(1-K3)*u). 
@@ -42,12 +42,12 @@ gain:
     # Kv0: 1.7
     # Kv1: 1.7
     # Kv2: 1.9
-    Kp0: 5.7
-    Kp1: 5.7 
-    Kp2: 6.2
-    Kv0: 3.4
-    Kv1: 3.4
-    Kv2: 4.0
+    Kp0: 11.5
+    Kp1: 11.5 
+    Kp2: 8.5
+    Kv0: 7.2
+    Kv1: 7.2
+    Kv2: 7.2
     # ↓↓↓ No use now --
     Kvi0: 0.0
     Kvi1: 0.0
@@ -72,3 +72,15 @@ msg_timeout:
     cmd:  0.5
     imu:  0.5
     bat:  0.5
+
+lqrgain:
+    dt: 0.01
+    Q0: 30.0
+    Q1: 30.0
+    Q2: 40.0
+    Q3: 20.0
+    Q4: 20.0
+    Q5: 30.0
+    R0: 0.1
+    R1: 0.1
+    R2: 0.1

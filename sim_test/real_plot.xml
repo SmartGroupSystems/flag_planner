@@ -3,10 +3,10 @@
  <tabbed_widget parent="main_window" name="Main Window">
   <Tab tab_name="tab1" containers="1">
    <Container>
-    <DockSplitter orientation="-" count="1" sizes="1">
+    <DockSplitter sizes="1" count="1" orientation="-">
      <DockArea name="...">
-      <plot flip_x="false" style="Lines" flip_y="false" mode="TimeSeries">
-       <range right="172.066245" top="17.001154" bottom="-0.815818" left="0.000000"/>
+      <plot mode="TimeSeries" flip_x="false" flip_y="false" style="Lines">
+       <range left="0.000000" top="1.025042" right="14.142732" bottom="-0.025001"/>
        <limitY/>
        <curve color="#d62728" name="/so3_cmd/force/z"/>
        <curve color="#1ac938" name="/odom_visualization/pose/pose/position/z"/>
@@ -24,7 +24,7 @@
  <!-- - - - - - - - - - - - - - - -->
  <Plugins>
   <plugin ID="DataLoad CSV">
-   <default time_axis="" delimiter="0"/>
+   <default delimiter="0" time_axis=""/>
   </plugin>
   <plugin ID="DataLoad MCAP"/>
   <plugin ID="DataLoad ROS bags">
@@ -57,7 +57,7 @@
  </Plugins>
  <!-- - - - - - - - - - - - - - - -->
  <previouslyLoaded_Datafiles>
-  <fileInfo prefix="" filename="real_record.bag">
+  <fileInfo filename="real_record.bag" prefix="">
    <selected_datasources value="/debugPx4ctrl;/odom_visualization/pose;/so3_cmd"/>
    <plugin ID="DataLoad ROS bags">
     <use_header_stamp value="false"/>

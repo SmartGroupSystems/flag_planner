@@ -1,18 +1,18 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <root>
  <tabbed_widget parent="main_window" name="Main Window">
-  <Tab containers="1" tab_name="tab1">
+  <Tab tab_name="tab1" containers="1">
    <Container>
     <DockSplitter orientation="-" count="1" sizes="1">
      <DockArea name="...">
-      <plot flip_y="false" style="Lines" mode="TimeSeries" flip_x="false">
-       <range bottom="-0.069174" right="12.705103" top="0.036478" left="0.000000"/>
+      <plot mode="TimeSeries" flip_y="false" style="Lines" flip_x="false">
+       <range right="81.828630" bottom="-1.568420" left="0.000000" top="1.826815"/>
        <limitY/>
-       <curve color="#1f77b4" name="/debugPx4ctrl/des_p_z"/>
-       <curve color="#d62728" name="/debugPx4ctrl/des_p_y"/>
        <curve color="#1ac938" name="/debugPx4ctrl/des_p_x"/>
-       <curve color="#ff7f0e" name="/vins_fusion/imu_propagate/pose/pose/position/x"/>
-       <curve color="#f14cc1" name="/vins_fusion/imu_propagate/pose/pose/position/y"/>
+       <curve color="#d62728" name="/debugPx4ctrl/des_p_y"/>
+       <curve color="#ff7f0e" name="/debugPx4ctrl/des_p_z"/>
+       <curve color="#f14cc1" name="/vins_fusion/imu_propagate/pose/pose/position/x"/>
+       <curve color="#1f77b4" name="/vins_fusion/imu_propagate/pose/pose/position/y"/>
        <curve color="#9467bd" name="/vins_fusion/imu_propagate/pose/pose/position/z"/>
       </plot>
      </DockArea>
@@ -26,7 +26,7 @@
  <!-- - - - - - - - - - - - - - - -->
  <Plugins>
   <plugin ID="DataLoad CSV">
-   <default time_axis="" delimiter="0"/>
+   <default delimiter="0" time_axis=""/>
   </plugin>
   <plugin ID="DataLoad MCAP"/>
   <plugin ID="DataLoad ROS bags">

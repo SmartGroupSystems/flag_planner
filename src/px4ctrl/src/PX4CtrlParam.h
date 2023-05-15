@@ -15,6 +15,13 @@ public:
 		double KAngR, KAngP, KAngY;
 	};
 
+	struct Lqrgain
+	{
+		double dt;
+    	double Q0,Q1,Q2,Q3,Q4,Q5;
+    	double R0,R1,R2;
+	};
+
 	struct RotorDrag
 	{
 		double x, y, z;
@@ -58,6 +65,7 @@ public:
 	};
 
 	Gain gain;
+	Lqrgain lqrgain;
 	RotorDrag rt_drag;
 	MsgTimeout msg_timeout;
 	RCReverse rc_reverse;
